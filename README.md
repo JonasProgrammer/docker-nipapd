@@ -46,3 +46,23 @@ configuration data and the account database.
 Beware that changes to the configuration are overwritten during container
 startup. Also, while additional users can be created, the user account supplied
 via `NIPAP_USERNAME` will always be created or updated with the current password.
+
+## nipap-cli
+
+### Configuration
+
+| Variable         | Description                   | Default |
+|------------------|-------------------------------|---------|
+| `NIPAP_HOST`     | hostname of the nipapd server | -       |
+| `NIPAP_PORT`     | port of the nipapd server     | `1337`  |
+| `NIPAP_USERNAME` | name of account to use        | -       |
+| `NIPAP_PASSWORD` | password of account to use    | -       |
+
+#### Secret support
+
+`NIPAP_USERNAME` and `NIPAP_PASSWORD` all have a corresponding `var_FILE`
+environment variable that can be used to retrieve the desired contents from a
+file, rather than directly passing it via the docker command line.
+
+For use with docker secrets, one could use
+`NIPAP_PASSWORD_FILE=/run/secrets/nipap-pw` for example.

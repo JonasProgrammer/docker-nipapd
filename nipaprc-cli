@@ -1,0 +1,8 @@
+[global]
+hostname = {{NIPAP_HOST}}
+port = {{NIPAP_PORT}}
+username = {{NIPAP_USERNAME}}
+password = {{NIPAP_PASSWORD}}
+
+default_vrf_rt = -
+default_list_vrf_rt = all
