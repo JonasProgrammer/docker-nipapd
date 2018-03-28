@@ -6,7 +6,7 @@ Docker stack-ready images for nipapd
 ### Configuration
 
 | Variable         | Description                           | Default   |
-+------------------+---------------------------------------+-----------+
+|------------------|---------------------------------------|-----------|
 | `LISTEN_ADDRESS` | address on which nipapd should listen | `0.0.0.0` |
 | `LISTEN_PORT`    | port on which nipapd should listen    | `1337`    |
 | `SYSLOG`         | true / false enable syslog?           | `false`   |
