@@ -1,0 +1,43 @@
+version: '3.4'
+
+services:
+  db:
+    image: jonasprogrammer/postgres-ip4r:10
+    networks:
+      - backend-db
+    secrets:
+      - db-pass
+    environment:
+      - POSTGRES_PASSWORD_FILE=/run/secrets/db-pass
+      - POSTGRES_DB=some_beautiful_ipam
+  nipapd:
+    image: jonasprogrammer/nipapd
+    networks:
+      - backend-db
+    secrets:
+      - db-pass
+      - nipap-pass
+    configs:
+      - source: nipap-ro-script
+        target: /etc/nipap/docker-init.d/add-ro-user.sh
+        mode: 0700
+    environment:
+      - DB_HOST=db
+      - DB_NAME=some_beautiful_ipam
+      - DB_USERNAME=postgres
+      - DB_PASSWORD_FILE=/run/secrets/db-pass
+      - NIPAP_USERNAME=toor
+      - NIPAP_PASSWORD_FILE=/run/secrets/nipap-pass
+
+networks:
+  backend-db:
+
+configs:
+  nipap-ro-script:
+    file: add-readonly-user.sh
+
+secrets:
+  db-pass:
+    file: db-pw.txt
+  nipap-pass:
+    file: nipap-pw.txt

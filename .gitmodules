@@ -1,0 +1,4 @@
+[submodule "nipap"]
+	path = nipap
+	url = https://github.com/SpriteLink/NIPAP.git
+	branch = master
