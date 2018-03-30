@@ -10,7 +10,6 @@ RUN apt-get update \
 
 COPY nipap/nipap-cli /nipap
 COPY nipap/pynipap /nipap/pynipap
-COPY entrypoint-cli.sh /nipap/entrypoint.sh
 COPY nipaprc-cli /nipap/nipaprc
 WORKDIR /nipap
 RUN cd /nipap/pynipap && python setup.py install && cd /nipap \
@@ -19,5 +18,6 @@ RUN cd /nipap/pynipap && python setup.py install && cd /nipap \
 
 ENV NIPAP_PORT 1337
 
+COPY entrypoint-cli.sh /nipap/entrypoint.sh
 ENTRYPOINT ["/nipap/entrypoint.sh"]
 CMD ["bash"]

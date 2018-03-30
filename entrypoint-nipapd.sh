@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -x
+set -e
 
 vars="DB_USERNAME DB_PASSWORD NIPAP_USERNAME NIPAP_PASSWORD"
 
@@ -14,8 +14,19 @@ done
 
 envtpl --allow-missing /nipap/nipap.conf.dist -o /etc/nipap/nipap.conf
 
+case "$AUTH_DEFAULT" in
+    f*|n*|0|skip)
+        skip_auth=1
+        ;;
+    *)
+        skip_auth=0
+        ;;
+esac
+
+. /nipap/backend-config-generator.sh >> /etc/nipap/nipap.conf
+
 /usr/sbin/nipap-passwd create-database
-if [ -n "$NIPAP_USERNAME" -a -n "$NIPAP_PASSWORD" ]; then
+if [ "$skip_auth" = "0" -a -n "$NIPAP_USERNAME" -a -n "$NIPAP_PASSWORD" ]; then
     echo "Creating user '$NIPAP_USERNAME'"
     /usr/sbin/nipap-passwd add --username $NIPAP_USERNAME --name "NIPAP user" --password $NIPAP_PASSWORD
 fi
@@ -26,4 +37,4 @@ if [ -d /etc/nipap/docker-init.d ]; then
     done
 fi
 
-exec /usr/sbin/nipapd --debug --foreground --auto-install-db --auto-upgrade-db --no-pid-file
+exec "$@"
