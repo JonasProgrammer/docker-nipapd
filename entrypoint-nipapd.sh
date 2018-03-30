@@ -28,7 +28,7 @@ esac
 /usr/sbin/nipap-passwd create-database
 if [ "$skip_auth" = "0" -a -n "$NIPAP_USERNAME" -a -n "$NIPAP_PASSWORD" ]; then
     echo "Creating user '$NIPAP_USERNAME'"
-    /usr/sbin/nipap-passwd add --username $NIPAP_USERNAME --name "NIPAP user" --password $NIPAP_PASSWORD
+    /usr/sbin/nipap-passwd add --username $NIPAP_USERNAME --name "NIPAP user" --password $NIPAP_PASSWORD --trusted
 fi
 
 if [ -d /etc/nipap/docker-init.d ]; then
