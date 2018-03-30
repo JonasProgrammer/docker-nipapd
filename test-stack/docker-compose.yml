@@ -11,7 +11,9 @@ services:
       - POSTGRES_PASSWORD_FILE=/run/secrets/db-pass
       - POSTGRES_DB=some_beautiful_ipam
   nipapd:
-    image: jonasprogrammer/nipapd
+    image: jonasprogrammer/nipapd:latest
+    ports:
+      - "1337:1337"
     networks:
       - backend-db
     secrets:
@@ -28,6 +30,19 @@ services:
       - DB_PASSWORD_FILE=/run/secrets/db-pass
       - NIPAP_USERNAME=toor
       - NIPAP_PASSWORD_FILE=/run/secrets/nipap-pass
+      # Use the following for LDAP
+#      - AUTH_DEFAULT=false
+#      - AUTH_BACKEND=ldap
+#      - AUTH_BACKEND_ldap_type=LdapAuth
+#      - AUTH_BACKEND_ldap_uri=ldaps://your.company
+#      - AUTH_BACKEND_ldap_tls=False
+#      - AUTH_BACKEND_ldap_basedn=ou=users,dc=your,dc=company
+#      - AUTH_BACKEND_ldap_binddn_fmt=cn={},ou=users,dc=your,dc=company
+#      - AUTH_BACKEND_ldap_search=(cn={})
+#      - AUTH_BACKEND_ldap_search_binddn=cn=nipap,ou=users,dc=your,dc=company
+#      - AUTH_BACKEND_ldap_search_password_FILE=/run/secrets/nipap-pass
+#      - AUTH_BACKEND_ldap_rw_group=cn=rw,ou=groups,dc=your,dc=company
+#      - AUTH_BACKEND_ldap_ro_group=cn=ro,ou=groups,dc=your,dc=company
 
 networks:
   backend-db:
