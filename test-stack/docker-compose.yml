@@ -16,6 +16,7 @@ services:
       - "1337:1337"
     networks:
       - backend-db
+      - nipap
     secrets:
       - db-pass
       - nipap-pass
@@ -43,9 +44,24 @@ services:
 #      - AUTH_BACKEND_ldap_search_password_FILE=/run/secrets/nipap-pass
 #      - AUTH_BACKEND_ldap_rw_group=cn=rw,ou=groups,dc=your,dc=company
 #      - AUTH_BACKEND_ldap_ro_group=cn=ro,ou=groups,dc=your,dc=company
+  www:
+    image: jonasprogrammer/nipapd-www:latest
+    ports:
+      - "1338:8080"
+    networks:
+      - nipap
+    secrets:
+      - nipap-pass
+    environment:
+      - NIPAPD_HOST=nipapd
+      - NIPAPD_USERNAME=toor
+      - NIPAPD_PASSWORD_FILE=/run/secrets/nipap-pass
+      - WWW_USERNAME=www
+      - WWW_PASSWORD=www
 
 networks:
   backend-db:
+  nipap:
 
 configs:
   nipap-ro-script:
