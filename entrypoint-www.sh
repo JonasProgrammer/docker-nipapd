@@ -2,7 +2,7 @@
 
 set -e
 
-vars="DB_USERNAME DB_PASSWORD NIPAP_USERNAME NIPAP_PASSWORD"
+vars="WWW_USERNAME WWW_PASSWORD NIPAPD_USERNAME NIPAPD_PASSWORD"
 
 for var in $vars; do
   eval val="\$$var"
@@ -26,15 +26,18 @@ esac
 . /nipap/backend-config-generator.sh >> /etc/nipap/nipap.conf
 
 /usr/sbin/nipap-passwd create-database
-if [ "$skip_auth" = "0" -a -n "$NIPAP_USERNAME" -a -n "$NIPAP_PASSWORD" ]; then
-    echo "Creating user '$NIPAP_USERNAME'"
-    /usr/sbin/nipap-passwd add --username $NIPAP_USERNAME --name "NIPAP user" --password $NIPAP_PASSWORD --trusted
+if [ "$skip_auth" = "0" -a -n "$WWW_USERNAME" -a -n "$WWW_PASSWORD" ]; then
+    echo "Creating user '$WWW_USERNAME'"
+    /usr/sbin/nipap-passwd add --username $WWW_USERNAME --name "WWW user" --password $WWW_PASSWORD
 fi
 
 if [ -d /etc/nipap/docker-init.d ]; then
     for initializer in $(ls /etc/nipap/docker-init.d/); do
-        /etc/nipap/docker-init.d/$initializer
+        /etc/nipap/docker-initS.d/$initializer
     done
 fi
 
-exec "$@"
+
+chown -R nipap-www:nipap-www /var/cache/nipap-www
+
+su --preserve-environment -c "exec $@" nipap-www
