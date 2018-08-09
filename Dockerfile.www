@@ -9,8 +9,16 @@ RUN apt-get update \
  && rm -rf /var/lib/apt/lists/* \
  && adduser --gecos '' --disabled-login --disabled-password --no-create-home --home /var/cache/nipap-www nipap-www
 
-COPY nipap/nipap-www /nipap/www
-COPY nipap/pynipap /nipap/pynipap
+# Submodules seem broken on dockerhub
+#COPY nipap/nipap-www /nipap/www
+#COPY nipap/pynipap /nipap/pynipap
+RUN mkdir -p /tmp/nipap \
+ && cd /tmp/nipap \
+ && git clone --recurse-submodules https://github.com/jonasprogrammer/docker-nipapd \
+ && cp -Rf nipap/nipap-www /nipap/www \
+ && cp -Rf nipap/pynipap /nipap/pynipap \
+ && rm -Rf /tmp/nipap
+
 WORKDIR /nipap/www
 RUN cd /nipap/pynipap && python setup.py install && cd /nipap/www \
  && pip --no-input install -r requirements.txt \

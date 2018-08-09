@@ -8,9 +8,18 @@ RUN apt-get update \
  && echo 'touch $2' >>/usr/bin/rst2man \
  && chmod +x          /usr/bin/rst2man
 
-COPY nipap/nipap-cli /nipap
-COPY nipap/pynipap /nipap/pynipap
-COPY nipaprc-cli /nipap/nipaprc
+# Submodules seem broken on docker hub
+#COPY nipap/nipap-cli /nipap
+#COPY nipap/pynipap /nipap/pynipap
+#COPY nipaprc-cli /nipap/nipaprc
+RUN mkdir -p /tmp/nipap \
+ && cd /tmp/nipap \
+ && git clone --recurse-submodules https://github.com/jonasprogrammer/docker-nipapd \
+ && cp -Rf nipap/nipap-cli /nipap \
+ && cp -Rf nipap/pynipap /nipap/pynipap \
+ && cp -Rf nipaprc-cli /nipap/nipaprc \
+ && rm -Rf /tmp/nipap
+
 WORKDIR /nipap
 RUN cd /nipap/pynipap && python setup.py install && cd /nipap \
  && pip --no-input install -r requirements.txt \

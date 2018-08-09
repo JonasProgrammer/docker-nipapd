@@ -13,7 +13,14 @@ RUN apt-get update \
  && echo 'touch $2' >>/usr/bin/rst2man \
  && chmod +x          /usr/bin/rst2man
 
-COPY nipap/nipap /nipap
+# Submodules seem broken on dockerhub
+#COPY nipap/nipap /nipap
+RUN mkdir -p /tmp/nipap \
+ && cd /tmp/nipap \
+ && git clone --recurse-submodules https://github.com/jonasprogrammer/docker-nipapd \
+ && cp -Rf nipap/nipap /nipap \
+ && rm -Rf /tmp/nipap
+
 WORKDIR /nipap
 RUN pip --no-input install -r requirements.txt \
  && python setup.py install
