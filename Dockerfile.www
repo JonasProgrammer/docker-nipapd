@@ -1,6 +1,7 @@
+ARG BASE_IMAGE=jonasprogrammer/nipapd
 ARG BASE_VERSION=latest
 
-FROM jonasprogrammer/nipapd:${BASE_VERSION}
+FROM ${BASE_IMAGE}:${BASE_VERSION}
 
 RUN apt-get update \
  && apt-get install -y --no-install-recommends \
